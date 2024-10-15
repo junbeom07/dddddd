@@ -43,9 +43,13 @@ def intro():
 def md():
     return render_template('md.html')
 
-@app.route('/dlibland')  # dlibland 경로 추가
+@app.route('/dlibland') 
 def dlibland():
-    return render_template('dlibland.html')  # dlibland.html 렌더링
+    return render_template('dlibland.html')  
+
+@app.route('/sticker') 
+def sticker():
+    return render_template('sticker.html')  
 
 def generate_frames():
     cap = cv2.VideoCapture(0)

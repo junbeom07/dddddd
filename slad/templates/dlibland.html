@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>머신러닝 vs 딥러닝 - 인공지능의 눈</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-lugx-gaming.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <style>
+        .blog-post {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px; /* 좌우 패딩 추가 */
+        }
+        .blog-post h2 {
+            margin-top: 50px; /* 상단 여백 증가 */
+            margin-bottom: 25px; /* 하단 여백 증가 */
+            font-size: 2.5rem; /* 제목 크기 증가 */
+            color: #333;
+        }
+        .blog-post h3 {
+            margin-top: 40px; /* 상단 여백 증가 */
+            margin-bottom: 20px; /* 하단 여백 증가 */
+            font-size: 2rem; /* 부제목 크기 증가 */
+            color: #444;
+        }
+        .blog-post p {
+            font-size: 1.2rem; /* 본문 텍스트 크기 증가 */
+            line-height: 1.8; /* 줄 간격 증가 */
+            margin-bottom: 30px; /* 하단 여백 증가 */
+            color: #555;
+        }
+        .blog-post img {
+            width: 100%;
+            height: auto;
+            margin: 40px 0; /* 이미지 상하 여백 증가 */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .blog-post ul, .blog-post ol {
+            margin-bottom: 30px; /* 리스트 하단 여백 증가 */
+            padding-left: 20px;
+        }
+        .blog-post li {
+            margin-bottom: 15px; /* 리스트 항목 하단 여백 증가 */
+        }
+        .post-meta {
+            font-style: italic;
+            color: #6c757d;
+            margin-bottom: 40px; /* 메타 정보 하단 여백 증가 */
+        }
+
+        /* 비디오 스타일 추가 */
+        #webcam {
+            display: block; /* 블록 요소로 설정 */
+            margin: 0 auto; /* 좌우 여백 자동으로 설정하여 중앙 정렬 */
+            width: 70%; /* 너비를 100%로 설정하여 반응형으로 만듭니다 */
+            height: auto; /* 높이는 자동으로 조정 */
+            max-height: 80vh; /* 최대 높이를 뷰포트 높이의 80%로 설정 */
+            border-radius: 8px; /* 모서리 둥글게 */
+            object-fit: cover; /* 원본 비율 유지하면서 공간에 맞춤 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" style="width: 158px;">
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{{ url_for('index') }}">Home</a></li>
+                            <li><a href="{{ url_for('shop') }}">Our Project</a></li>
+                            <li><a href="#">Sign In</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>메뉴</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="page-heading header-text">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>dlib landmark</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="computer-vision-blog section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <img id="webcam" src="{{ url_for('video_feed') }}" alt="웹캠 스트리밍">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="col-lg-12">
+                <p>오현고등학교 정보동아리 오코딩</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('vendor_files', filename='jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('vendor_files', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/isotope.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/owl-carousel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/counter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</body>
+</html>

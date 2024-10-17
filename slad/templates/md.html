@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>머신러닝 vs 딥러닝</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-lugx-gaming.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <style>
+        .blog-post {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px; /* 좌우 패딩 추가 */
+        }
+        .blog-post h2 {
+            margin-top: 50px; /* 상단 여백 증가 */
+            margin-bottom: 25px; /* 하단 여백 증가 */
+            font-size: 2.5rem; /* 제목 크기 증가 */
+            color: #333;
+        }
+        .blog-post h3 {
+            margin-top: 40px; /* 상단 여백 증가 */
+            margin-bottom: 20px; /* 하단 여백 증가 */
+            font-size: 2rem; /* 부제목 크기 증가 */
+            color: #444;
+        }
+        .blog-post p {
+            font-size: 1.2rem; /* 본문 텍스트 크기 증가 */
+            line-height: 1.8; /* 줄 간격 증가 */
+            margin-bottom: 30px; /* 하단 여백 증가 */
+            color: #555;
+        }
+        .blog-post img {
+            width: 100%;
+            height: auto;
+            margin: 40px 0; /* 이미지 상하 여백 증가 */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .blog-post ul, .blog-post ol {
+            margin-bottom: 30px; /* 리스트 하단 여백 증가 */
+            padding-left: 20px;
+        }
+        .blog-post li {
+            margin-bottom: 15px; /* 리스트 항목 하단 여백 증가 */
+        }
+        .post-meta {
+            font-style: italic;
+            color: #6c757d;
+            margin-bottom: 40px; /* 메타 정보 하단 여백 증가 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" style="width: 158px;">
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{{ url_for('index') }}">Home</a></li>
+                            <li><a href="{{ url_for('shop') }}">Our Project</a></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>메뉴</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="page-heading header-text">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>머신러닝 vs 딥러닝</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="computer-vision-blog section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <article class="blog-post">
+                        <h2>1. 서론</h2>
+                        <p>인공지능(AI)이라는 개념은 1956년 미국 다트머스 대학에서 존 매카시 교수가 개최한 ‘다트머스 회의’에서 처음 등장했습니다. “컴퓨터가 생각할 수 있는가?”라는 질문으로 시작된 해답 찾기는 오늘날에도 진행 중이며, 인공지능 구현에는 컴퓨터 소프트웨어와 하드웨어 기술뿐만 아니라 수학과 통계 등의 지식이 필요합니다. 이 과정에서 머신러닝과 딥러닝이 개발되었습니다. 이 글에서는 머신러닝과 딥러닝의 차이점과 공통점을 명확히 하여 독자가 두 가지 접근법을 이해하는 데 도움을 주고자 합니다.</p>
+
+                        <h2>2. 머신러닝이란?</h2>
+                        <p><strong>정의:</strong> 머신러닝은 데이터로부터 학습하여 예측 및 결정을 내리는 알고리즘과 모델을 개발하는 기술입니다.</p>
+                        <p><strong>작동 원리:</strong> 머신러닝 모델은 주어진 데이터에서 패턴을 찾아내고, 이를 통해 새로운 데이터에 대한 예측을 수행합니다.</p>
+                        <p><strong>특징:</strong> 머신러닝은 대량의 데이터를 이용하여 기계가 스스로 대응 방안을 학습하는 방식으로, 개발자가 직접 코딩하지 않고도 의사 결정을 할 수 있도록 합니다.</p>
+
+                        <h2>3. 딥러닝이란?</h2>
+                        <p><strong>정의:</strong> 딥러닝은 인공 신경망을 사용하여 데이터로부터 높은 수준의 특징을 추출하고 학습하는 기술입니다.</p>
+                        <p><strong>작동 원리:</strong> 딥러닝 모델은 여러 층의 인공 신경망을 통해 입력 데이터를 처리하고 각 층에서 특징을 점진적으로 추출합니다.</p>
+                        <p><strong>특징:</strong> 딥러닝은 머신러닝의 한 분야로, 사람의 뇌를 모방한 인공 신경망을 이용한 학습 방법입니다. 병렬 연산에 최적화된 GPU의 발전과 인터넷 속도의 향상이 딥러닝 기반 인공지능의 발전을 가속화했습니다.</p>
+
+                        <h2>4. 머신러닝과 딥러닝의 차이점</h2>
+                        <ul>
+                            <li><strong>데이터 요구 사항:</strong> 머신러닝은 상대적으로 적은 데이터로 학습할 수 있지만, 딥러닝은 대량의 데이터가 필요합니다.</li>
+                            <li><strong>모델 복잡도:</strong> 머신러닝 모델은 비교적 간단하지만, 딥러닝 모델은 여러 층으로 이루어져 매우 복잡합니다.</li>
+                            <li><strong>해결 가능한 문제 유형:</strong> 머신러닝은 규칙 기반 문제 해결에 강하고, 딥러닝은 이미지 인식, 자연어 처리 등 비정형 데이터 처리에 강점을 가집니다.</li>
+                        </ul>
+
+                        <h2>5. 머신러닝과 딥러닝의 공통점</h2>
+                        <ul>
+                            <li><strong>목표:</strong> 두 접근법 모두 데이터로부터 학습하여 예측 및 분류를 수행하는 데 중점을 둡니다.</li>
+                            <li><strong>기본 원리:</strong> 기계 학습의 원리를 기반으로 하며, 최적화 알고리즘을 사용합니다.</li>
+                            <li><strong>응용 분야:</strong> 머신러닝과 딥러닝은 의료, 금융, 자율주행차 등 다양한 분야에서 활용됩니다.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="more-info">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="tabs-content">
+                <div class="row">
+                  <div class="nav-wrapper ">
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">A</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">B</button>
+                      </li>
+                    </ul>
+                  </div>              
+                  <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia autem eligendi, numquam nulla nobis necessitatibus porro hic et nihil itaque delectus atque eum ad, quasi explicabo repellat sunt vitae ut.</p>
+                      <br>
+                      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam, veritatis. Quibusdam quod voluptatem inventore sapiente? Sed, nisi? Sunt cupiditate esse pariatur adipisci, rem cumque architecto, labore ipsum, debitis fuga nulla.</p>
+                    </div>
+                    <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Impedit consectetur eligendi illo ullam nobis ad quaerat commodi. Debitis tempore, laudantium non aperiam expedita, natus, asperiores esse iusto harum nostrum quam.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <footer>
+        <div class="container">
+            <div class="col-lg-12">
+                <p>오현고등학교 정보동아리 오코딩</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('vendor_files', filename='jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('vendor_files', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/isotope.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/owl-carousel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/counter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+</body>
+</html>

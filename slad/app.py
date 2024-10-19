@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory, Response
+from flask import Flask, render_template, request, send_from_directory, Response
 import os
 import cv2
 import dlib
@@ -11,9 +11,7 @@ app = Flask(__name__)
 # 정적 파일 경로 설정
 app.static_folder = 'assets'
 # 얼굴 탐지기 및 랜드마크 예측기 초기화
-
-orange_img = cv2.imread('orange.jpg')
-orange_img = cv2.resize(orange_img, dsize=(512, 512))
+selected_image_path = 'orange.jpg'
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
@@ -62,6 +60,17 @@ def sticker():
 def orange():
     return render_template('orange.html')  
 
+@app.route('/select_image')
+def select_image():
+    return render_template('select_image.html')
+
+@app.route('/set_image', methods=['POST'])
+def set_image():
+    global selected_image_path
+    selected_image_path = request.form['image']  # 선택된 이미지 경로 저장
+    image_name = selected_image_path.split('.')[0]  # 이미지 이름 추출 (확장자 제외)
+    return render_template('orange.html', image_name=image_name)  # 이미지 이름을 템플릿에 전달
+
 @app.route('/deep') 
 def deep():
     return render_template('deep.html')  
@@ -96,6 +105,9 @@ def video_feed():
 
 def generate_frames2():
     cap = cv2.VideoCapture(0)
+    orange_img = cv2.imread(selected_image_path)  # 사용자가 선택한 이미지 사용
+    orange_img = cv2.resize(orange_img, dsize=(512, 512))
+
     while True:
         ret, img = cap.read()
         if not ret:
@@ -112,28 +124,28 @@ def generate_frames2():
             shape = predictor(img, face)
             shape = face_utils.shape_to_np(shape)
 
-            for p in shape:
-                cv2.circle(face_img, center=(p[0] - x1, p[1] - y1), radius=2, color=255, thickness=-1)
-
-            # eyes
+            # 눈의 좌표
             le_x1 = shape[36, 0]
             le_y1 = shape[37, 1]
             le_x2 = shape[39, 0]
             le_y2 = shape[41, 1]
-            le_margin = int((le_x2 - le_x1) * 0.18)
+            le_margin = int((le_x2 - le_x1) * 0.2)  # 마진 증가
 
             re_x1 = shape[42, 0]
             re_y1 = shape[43, 1]
             re_x2 = shape[45, 0]
             re_y2 = shape[47, 1]
-            re_margin = int((re_x2 - re_x1) * 0.18)
+            re_margin = int((re_x2 - re_x1) * 0.2)  # 마진 증가
 
+            # 눈 이미지 추출
             left_eye_img = img[le_y1 - le_margin:le_y2 + le_margin, le_x1 - le_margin:le_x2 + le_margin].copy()
             right_eye_img = img[re_y1 - re_margin:re_y2 + re_margin, re_x1 - re_margin:re_x2 + re_margin].copy()
 
-            left_eye_img = resize(left_eye_img, width=100)
-            right_eye_img = resize(right_eye_img, width=100)
+            # 눈 이미지 크기 조정
+            left_eye_img = resize(left_eye_img, width=120)  # 크기 증가
+            right_eye_img = resize(right_eye_img, width=120)  # 크기 증가
 
+            # 눈 합성
             result = cv2.seamlessClone(
                 left_eye_img,
                 result,
@@ -150,7 +162,7 @@ def generate_frames2():
                 cv2.MIXED_CLONE
             )
 
-            # mouth
+            # 입의 좌표
             mouth_x1 = shape[48, 0]
             mouth_y1 = shape[50, 1]
             mouth_x2 = shape[54, 0]
@@ -276,7 +288,7 @@ class VideoCamera(object):
 
             img_show[refined_y:end_y, refined_x:end_x] = hat_area
 
-        # 결과 프레임 반환
+        # 과 프레임 반환
         return img_show
     
 def generate_frames3():

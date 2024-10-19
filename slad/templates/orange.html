@@ -91,13 +91,25 @@ https://templatemo.com/tm-589-lugx-gaming
           </div>
         </div>
         <div class="col-lg-6 align-self-center">
-          <h4>The Annoying Orange</h4>
-          <span class="price"><em>$28</em> $22</span>
+          <h4>{{ image_name | capitalize }}</h4>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint animi recusandae numquam? Voluptatibus dolores quis dignissimos alias consequuntur inventore saepe a assumenda. Ipsam iure dicta illum a dignissimos molestias non.</p>
-          <form id="qty" action="#">
-            <input type="qty" class="form-control" id="1" aria-describedby="quantity" placeholder="1">
-            <button type="submit"><i class="fa fa-shopping-bag"></i> ADD TO CART</button>
-          </form> 
+          <form action="/set_image" method="post">
+            <div>
+                <label>
+                    <input type="radio" name="image" value="orange.jpg" checked>
+                    Orange
+                </label>
+                <label>
+                    <input type="radio" name="image" value="Midget Apple.jpg">
+                    Apple
+                </label>
+                <label>
+                    <input type="radio" name="image" value="pear.jpg">
+                    Pear
+                </label>
+            </div>
+            <button type="submit">선택한 이미지 사용</button>
+          </form>
         </div>
         <div class="col-lg-12">
           <div class="sep"></div>
@@ -106,39 +118,7 @@ https://templatemo.com/tm-589-lugx-gaming
     </div>
   </div>
 
-  <div class="more-info">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="tabs-content">
-            <div class="row">
-              <div class="nav-wrapper ">
-                <ul class="nav nav-tabs" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews (3)</button>
-                  </li>
-                </ul>
-              </div>              
-              <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint dicta sapiente aspernatur quisquam voluptatibus temporibus, aliquam culpa officia consequuntur, inventore, quibusdam praesentium quidem neque quas amet in eaque cupiditate magni.</p>
-                  <br>
-                  <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Inventore vitae dolorum necessitatibus? Fugiat ipsa perferendis pariatur voluptates, eum obcaecati eos possimus ipsam porro iusto dolorum. Minima voluptatum non voluptate quis.</p>
-                </div>
-                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus nobis nostrum porro corporis, provident consequuntur ex autem mollitia quae aperiam commodi ipsam architecto quia tempora fugit, atque enim quidem. Libero.<br><br>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, odio. Libero asperiores, ad fugit ipsa esse ut. Nisi facere nemo nihil. Cumque et ex enim natus non voluptatibus nam voluptatum?</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  
 
   <footer>
     <div class="container">

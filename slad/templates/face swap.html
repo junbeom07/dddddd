@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>얼굴바꾸기 원리</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-lugx-gaming.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
+
+TemplateMo 589 lugx gaming
+
+https://templatemo.com/tm-589-lugx-gaming
+
+-->
+<style>
+    .blog-post {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px; /* 좌우 패딩 추가 */
+    }
+    .blog-post h2 {
+      margin-top: 50px; /* 상단 여백 증가 */
+      margin-bottom: 25px; /* 하단 여백 증가 */
+      font-size: 2.5rem; /* 제목 크기 증가 */
+      color: #333;
+    }
+    .blog-post h3 {
+      margin-top: 40px; /* 상단 여백 증가 */
+      margin-bottom: 20px; /* 하단 여백 증가 */
+      font-size: 2rem; /* 부제목 크기 증가 */
+      color: #444;
+    }
+    .blog-post p {
+      font-size: 1.2rem; /* 본문 텍스트 크기 증가 */
+      line-height: 1.8; /* 줄 간격 증가 */
+      margin-bottom: 30px; /* 하단 여백 증가 */
+      color: #555;
+    }
+    .blog-post img {
+      width: 100%;
+      height: auto;
+      margin: 40px 0; /* 이미지 상하 여백 증가 */
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    .blog-post ul, .blog-post ol {
+      margin-bottom: 30px; /* 리스트 하단 여백 증가 */
+      padding-left: 20px;
+    }
+    .blog-post li {
+      margin-bottom: 15px; /* 리스트 항목 하단 여백 증가 */
+    }
+    .post-meta {
+      font-style: italic;
+      color: #6c757d;
+      margin-bottom: 40px; /* 메타 정보 하단 여백 증가 */
+    }
+  </style>
+  </head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" style="width: 158px;">
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                      <li><a href="{{ url_for('index') }}">Home</a></li>
+                      <li><a href="{{ url_for('shop') }}">Our Project</a></li>
+                  </ul>   
+                    <a class='menu-trigger'>
+                        <span>메뉴</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div class="page-heading header-text">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h3>얼굴 바꾸기 원리</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="computer-vision-blog section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <article class="blog-post">
+            <h2>얼굴 바꾸기 원리</h2><br><br><br>
+            <p>1. dlib으로 68개의 특징점(랜드마크)을 추출한다.<br>2. 얼굴 랜드마크를 끼리 이어서 얼굴을 조각 조각 나눈다.<br>3. 랜드마크와 타겟 얼굴 특징(피부색,크기,회전)을 맞춰준다.</p>
+
+            <h3>얼굴 랜드마크 검출</h3>
+            <img src="{{ url_for('static', filename='images/cv15.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid" style="max-width: 50%;">
+            <p>dlib를 사용해서 얼굴의 랜드마크를 검출합니다.</p>
+            <h3>얼굴 영역 분할</h3>
+            <img src="{{ url_for('static', filename='images/cv12.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid" style="max-width: 50%;">
+            <p>델로네 삼각분할(Delaunay Triangulation)
+
+            </p>
+            <p> 델로네 삼각분할은 주어진 점들을 가능한 한 자연스럽고 균형 있게 삼각형으로 나누는 방법이다. 
+                <br>이 방법은 각 삼각형의 외접원이 다른 점을 포함하지 않도록 하여, 날카롭거나 일그러진 삼각형이 만들어지지 않도록 설계된다.</p>
+            <img src="{{ url_for('static', filename='images/cv14.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid" style="max-width: 50%;">
+            <p>얼굴 영역을 분할한 모습</p>
+            <p>사람마다 랜드마크가 찍히는 위치가 다르기 때문에 삼각형의 크기와 모양이 다르다.</p>
+            <img src="{{ url_for('static', filename='images/cv13.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid">
+            <p>아핀 변환(Affine Transformation)</p>
+            <p>아핀 변환은 이미지나 기하학적 도형을 변형하는 방법으로, 회전, 이동, 크기 조정, 기울이기 등의 변화를 포함한다. 아핀 변환은 선형 변환과 평행 이동을 결합한 형태로, 변환된 도형은 모양은 변하지만 변환후에도 직선은 직진성을 유지한다. <br><br>직선성을 유지하면 도형의 구조가 변하지 않고 윤곽이나 경계가 명확하게 남아 후속 처리 시 다른 변환이나 효과를 적용하기 용이하다.</p>
+            <img src="{{ url_for('static', filename='images/cv16.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid">
+            <p>삼각형을 회전, 이동, 확대/축소, 또는 뒤틀기 등의 변환을 통해 타겟 얼굴 특징을 맞춰준다.</p>
+            <img src="{{ url_for('static', filename='images/cv17.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid">
+            <p>아핀 변환을 통해 타겟 얼굴 특징을 맞춰준 모습</p>
+            <h3>얼굴 특징 맞추기</h3>
+            <p>알파 블렌딩(두 이미지의 투명도를 조절하고 섞어 합성 이미지를 만듬)과 마스킹(특정 영역만 선택하여 처리하거나 변형하는 기법)을 사용하여 타겟 얼굴 특징을 맞춰준다.  </p>
+            <div class="d-flex justify-content-between">
+                <img src="{{ url_for('static', filename='images/cv18.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid" style="max-width: 48%;">
+                <img src="{{ url_for('static', filename='images/cv19.png') }}" alt="컴퓨터 비전 이미지" class="img-fluid" style="max-width: 48%;">
+            </div>
+            <p>opencv의 seamlessClone함수 사용</p>
+            <p>출처 Pysource 유튜브 Face swapping - Opencv with Python 영상</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>오현고등학교 정보동아리 오코딩</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="{{ url_for('vendor_files', filename='jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('vendor_files', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/isotope.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/owl-carousel.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/counter.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  </body>
+</html>

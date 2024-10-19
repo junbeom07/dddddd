@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>스티커 필터</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('vendor_files', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-lugx-gaming.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
+
+TemplateMo 589 lugx gaming
+
+https://templatemo.com/tm-589-lugx-gaming
+
+-->
+  </head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="logo">
+                        <img src="assets/images/logo.png" alt="" style="width: 158px;">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                      <li><a href="{{ url_for('index') }}">Home</a></li>
+                      <li><a href="{{ url_for('shop') }}">Our Project</a></li>
+                  </ul>   
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div class="page-heading header-text">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h3>스티커 페이지</h3>
+          <div class="video-container">
+          </div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="single-product section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="left-image">
+            <img src="{{ url_for('video_feed3') }}" alt="비디오 피드" />
+          </div>
+        </div>
+        <div class="col-lg-6 align-self-center">
+          <h4>스티커 필터 페이지(디자인 아이디어 필요)</h4>
+          
+          <!-- 스티커 위치 및 크기 조절 버튼 추가 -->
+          <div style="text-align: center; margin-top: 20px;">
+            <h5 style="font-family: 'Poppins', sans-serif; font-weight: bold;">위치 조절</h5>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; margin-top: 10px;">
+                <button class="modern-btn" onclick="adjustStickerPosition(10, 0)">오른쪽으로 이동</button>
+                <button class="modern-btn" onclick="adjustStickerPosition(-10, 0)">왼쪽으로 이동</button>
+                <button class="modern-btn" onclick="adjustStickerPosition(0, 10)">아래로 이동</button>
+                <button class="modern-btn" onclick="adjustStickerPosition(0, -10)">위로 이동</button>
+            </div>
+            <h5 style="font-family: 'Poppins', sans-serif; font-weight: bold;">크기 조절</h5>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; margin-top: 10px;">
+                <button class="modern-btn" onclick="adjustStickerSize('width', 10)">가로 크기 증가</button>
+                <button class="modern-btn" onclick="adjustStickerSize('width', -10)">가로 크기 감소</button>
+                <button class="modern-btn" onclick="adjustStickerSize('height', 10)">세로 크기 증가</button>
+                <button class="modern-btn" onclick="adjustStickerSize('height', -10)">세로 크기 감소</button>
+            </div>
+            <button class="modern-btn reset-btn" onclick="resetSticker()">리셋</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="section categories related-games" style="background-color: #f8f9fa; padding: 40px 0;">
+    <div class="container">
+        <h4 style="text-align: center; margin-bottom: 30px; font-weight: bold;">스티커 추가</h4>
+        <div style="min-height: 120px; display: flex; align-items: center;"> <!-- 최소 높이를 미리보기 이미지 높이와 같게 설정 -->
+            <form id="sticker-upload-form" enctype="multipart/form-data" style="text-align: center; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; flex-grow: 1;">
+                <input type="file" name="file" required style="padding: 10px; border-radius: 5px; border: 1px solid #007bff; margin-right: 10px; width: 60%;">
+                <input type="hidden" name="sticker_index" value="{{ sticker_files|length + 1 }}">
+                <button type="submit" style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">스티커 업로드</button>
+            </form>
+            <!-- 이미지 미리보기 -->
+            <div id="preview" style="display: none; position: relative; z-index: 1000; margin-left: 10px; width: 100px; height: 100px; border: 2px solid #007bff; border-radius: 5px;"> <!-- 고정 크기와 테두리 설정 -->
+                <img id="preview-img" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;"> <!-- 크기 조정 -->
+            </div>
+        </div>
+        <div class="row" id="sticker-container">
+            {% for sticker in sticker_files %}
+            <div class="col-lg-4 col-sm-6 col-xs-12" style="margin-bottom: 20px;">
+                <div class="item" style="background-color: white; border: 2px solid #007bff; border-radius: 10px; padding: 20px; text-align: center;">
+                    <h4 style="color: black;"
+                        onmouseover="showPreview('{{ url_for('get_sticker', sticker_index=loop.index0 + 1) }}')" #그냥 무시해도되는거 말도안되는 오류 사용에 지장없음
+                        onmouseout="hidePreview()">
+                        {{ sticker }}
+                    </h4>
+                    <button onclick="changeSticker('{{ loop.index0 + 1 }}')" style="background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 5px; padding: 10px 15px;">스티커 변경</button>
+                    <button onclick="deleteSticker('{{ loop.index0 + 1 }}')" style="background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 5px; padding: 10px 15px;">삭제</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+
+        <script>
+            function showPreview(imagePath) {
+                const preview = document.getElementById('preview');
+                const previewImg = document.getElementById('preview-img');
+                previewImg.src = imagePath;
+                preview.style.display = 'block';
+            }
+
+            function hidePreview() {
+                const preview = document.getElementById('preview');
+                preview.style.display = 'none';
+            }
+        </script>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('sticker-upload-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+        const formData = new FormData(this);
+        
+        // 로딩 페이지 숨기기
+        document.getElementById('js-preloader').style.display = 'none';
+
+        fetch('/set_sticker', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                console.log('스티커가 추가되었습니다.');
+                location.reload(); // 페이지 새로고침하여 새 스티커 목록 반영
+            }
+        }).finally(() => {
+            // 요청 완료 후 로딩 페이지 숨기기
+            document.getElementById('js-preloader').style.display = 'none';
+        });
+    });
+
+    function changeSticker(stickerIndex) {
+        const formData = new FormData();
+        formData.append('sticker_index', stickerIndex);
+        fetch(`/change_sticker/${stickerIndex}`, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                console.log('스티커가 변경되었습니다.');
+            }
+        });
+    }
+
+    function deleteSticker(stickerIndex) {
+        // 로딩 페이지 숨기기
+        document.getElementById('js-preloader').style.display = 'none';
+
+        fetch(`/delete_sticker/${stickerIndex}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                console.log('스티커가 삭제되었습니다.');
+                location.reload(); // 페이지 새로고침하여 스티커 목록 반영
+            }
+        }).finally(() => {
+            // 요청 완료 후 로딩 페이지 숨기기
+            document.getElementById('js-preloader').style.display = 'none';
+        });
+    }
+
+    // 스티커 위치 조정 함수
+    function adjustStickerPosition(offsetX, offsetY) {
+        // AJAX 요청을 통해 서버에 위치 조정 요청
+        fetch('/adjust_sticker_position', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ offsetX: offsetX, offsetY: offsetY })
+        }).then(response => {
+            if (response.ok) {
+                console.log('스티커 위치가 조정되었습니다.');
+                // 여기서 로딩 페이지를 표시하지 않음
+            }
+        });
+    }
+
+    // 스티커 크기 조정 함수
+    function adjustStickerSize(dimension, change) {
+        // AJAX 요청을 통해 서버에 크기 조정 요청
+        fetch('/adjust_sticker_size', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dimension: dimension, change: change })
+        }).then(response => {
+            if (response.ok) {
+                console.log('스티커 크기가 조정되었습니다.');
+                // 여기서 로딩 페이지를 표시하지 않음
+            }
+        });
+    }
+
+    // 스티커 초기 상태로 되돌리기 함수
+    function resetSticker() {
+        fetch('/reset_sticker', {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                console.log('스티커가 초기 상태로 되돌려졌습니다.');
+                // 여기서 로딩 페이지를 표시하지 않음
+            }
+        });
+    }
+  </script>
+
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>오현고등학교 정보동아리 오코딩</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="{{ url_for('vendor_files', filename='jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('vendor_files', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/isotope.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/owl-carousel.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/counter.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  <!-- 비디오 피드 추가 -->
+
+</body>
+</html>

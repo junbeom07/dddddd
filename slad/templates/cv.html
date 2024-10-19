@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>컴퓨터 비전</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-lugx-gaming.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
+
+TemplateMo 589 lugx gaming
+
+https://templatemo.com/tm-589-lugx-gaming
+
+-->
+    <style>
+      .blog-post {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px; /* 좌우 패딩 추가 */
+      }
+      .blog-post h2 {
+        margin-top: 50px; /* 상단 여백 증가 */
+        margin-bottom: 25px; /* 하단 여백 증가 */
+        font-size: 2.5rem; /* 제목 크기 증가 */
+        color: #333;
+      }
+      .blog-post h3 {
+        margin-top: 40px; /* 상단 여백 증가 */
+        margin-bottom: 20px; /* 하단 여백 증가 */
+        font-size: 2rem; /* 부제목 크기 증가 */
+        color: #444;
+      }
+      .blog-post p {
+        font-size: 1.2rem; /* 본문 텍스트 크기 증가 */
+        line-height: 1.8; /* 줄 간격 증가 */
+        margin-bottom: 30px; /* 하단 여백 증가 */
+        color: #555;
+      }
+      .blog-post img {
+        width: 100%;
+        height: auto;
+        margin: 40px 0; /* 이미지 상하 여백 증가 */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-radius: 8px;
+      }
+      .blog-post ul, .blog-post ol {
+        margin-bottom: 30px; /* 리스트 하단 여백 증가 */
+        padding-left: 20px;
+      }
+      .blog-post li {
+        margin-bottom: 15px; /* 리스트 항목 하단 여백 증가 */
+      }
+      .post-meta {
+        font-style: italic;
+        color: #6c757d;
+        margin-bottom: 40px; /* 메타 정보 하단 여백 증가 */
+      }
+    </style>
+  </head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" style="width: 158px;">
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                      <li><a href="{{ url_for('index') }}">Home</a></li>
+                      <li><a href="{{ url_for('shop') }}">Our Project</a></li>
+                  </ul>   
+                    <a class='menu-trigger'>
+                        <span>메뉴</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div class="page-heading header-text">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h3>컴퓨터 비전이란</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="computer-vision-blog section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <article class="blog-post">
+            <h2>컴퓨터 비전의 개요</h2>
+            
+            <img src="{{ url_for('static', filename='images/cv1.webp') }}" alt="컴퓨터 비전 이미지" class="img-fluid">
+            
+            <p>컴퓨터 비전은 인공지능(AI)의 한 분야로, 머신러닝과 신경망을 통해 디지털 이미지, 비디오 등 시각적 데이터를 분석하여 의미 있는 정보를 추출하고, 문제를 발견하면 조치를 취하도록 학습하는 기술입니다. AI가 컴퓨터를 '생각'할 수 있게 만든다면, 컴퓨터 비전은 컴퓨터가 '보고', '이해'할 수 있게 만듭니다.</p>
+
+            <h3>컴퓨터 비전 vs. 인간 시각</h3>
+            <p>컴퓨터 비전은 인간의 시각과 유사하게 작동하지만, 카메라와 알고리즘을 통해 훨씬 빠른 시간 내에 데이터를 처리할 수 있습니다. 예를 들어, 시스템은 분당 수천 개의 제품을 검사해 인간의 능력을 초과할 수 있습니다.</p>
+            <img src="{{ url_for('static', filename='images/cv7.jpg') }}" alt="컴퓨터 비전 이미지" class="img-fluid">
+            <h3>주요 기술</h3>
+            <ul>
+              <li><strong>딥러닝:</strong> 방대한 데이터를 통해 기계가 시각적 데이터를 스스로 학습할 수 있도록 하는 기술.</li>
+              <li><strong>CNN(콘볼루션 신경망):</strong> 이미지를 픽셀로 분해하고 이를 통해 기계가 이미지를 '볼' 수 있도록 학습시키는 방법. CNN은 이미지의 큰 윤곽과 형태를 식별하고, 이를 바탕으로 반복적으로 더 정확한 예측을 수행합니다.</li>
+              <li><strong>RNN(순환 신경망):</strong> 비디오와 같은 연속적인 시각 데이터를 분석하여 이미지들이 어떻게 연결되는지 이해하게 하는 기술.</li>
+            </ul>
+
+            <img src="{{ url_for('static', filename='images/cv2.jpg') }}" alt="컴퓨터 비전 응용" class="img-fluid">
+
+            <h3>컴퓨터 비전의 응용 분야</h3>
+            <p>컴퓨터 비전은 제조, 에너지, 자동차 등 다양한 산업에서 활용되며, 시장 규모는 계속 성장 중입니다. 컴퓨터 비전은 다음과 같은 작업에 사용됩니다:</p>
+            <ul>
+              <h3>이미지 분류</h3>
+              <img src="{{ url_for('static', filename='images/cv3.png') }}" alt="컴퓨터 비전 응용" class="img-fluid">
+              <h3>객체 감지</h3>
+              <img src="{{ url_for('static', filename='images/cv4.webp') }}" alt="컴퓨터 비전 응용" class="img-fluid">
+              <h3>객체 추적</h3>
+              <img src="{{ url_for('static', filename='images/cv5.png') }}" alt="컴퓨터 비전 응용" class="img-fluid">
+              <h3>콘텐츠 기반 이미지 검색</h3>
+              <img src="{{ url_for('static', filename='images/cv6.png') }}" alt="컴퓨터 비전 응용" class="img-fluid">
+            </ul>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+  <footer>
+    <div class="container">
+      <div class="col-lg-12">
+        <p>오현고등학교 정보동아리 오코딩</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="{{ url_for('vendor_files', filename='jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('vendor_files', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/isotope.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/owl-carousel.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/counter.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  </body>
+</html>

@@ -91,25 +91,24 @@ https://templatemo.com/tm-589-lugx-gaming
           </div>
         </div>
         <div class="col-lg-6 align-self-center">
-          <h4>스티커 필터 페이지(디자인 아이디어 필요)</h4>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="display: inline-block;">스티커 필터</h4>
+            <button class="modern-btn reset-btn" style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; display: inline-block;" onclick="resetSticker()">리셋</button>
+          </div>
           
           <!-- 스티커 위치 및 크기 조절 버튼 추가 -->
           <div style="text-align: center; margin-top: 20px;">
-            <h5 style="font-family: 'Poppins', sans-serif; font-weight: bold;">위치 조절</h5>
+
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; margin-top: 10px;">
-                <button class="modern-btn" onclick="adjustStickerPosition(10, 0)">오른쪽으로 이동</button>
-                <button class="modern-btn" onclick="adjustStickerPosition(-10, 0)">왼쪽으로 이동</button>
-                <button class="modern-btn" onclick="adjustStickerPosition(0, 10)">아래로 이동</button>
-                <button class="modern-btn" onclick="adjustStickerPosition(0, -10)">위로 이동</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerPosition(10, 0)">오른쪽으로 이동</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerPosition(-10, 0)">왼쪽으로 이동</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerPosition(0, 10)">아래로 이동</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerPosition(0, -10)">위로 이동</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerSize('width', 10)">가로 크기 증가</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerSize('width', -10)">가로 크기 감소</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerSize('height', 10)">세로 크기 증가</button>
+                <button class="modern-btn" style="background-color: white; color: black; padding: 10px 15px; border: 2px solid #007bff; border-radius: 5px; cursor: pointer;" onclick="adjustStickerSize('height', -10)">세로 크기 감소</button>
             </div>
-            <h5 style="font-family: 'Poppins', sans-serif; font-weight: bold;">크기 조절</h5>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; margin-top: 10px;">
-                <button class="modern-btn" onclick="adjustStickerSize('width', 10)">가로 크기 증가</button>
-                <button class="modern-btn" onclick="adjustStickerSize('width', -10)">가로 크기 감소</button>
-                <button class="modern-btn" onclick="adjustStickerSize('height', 10)">세로 크기 증가</button>
-                <button class="modern-btn" onclick="adjustStickerSize('height', -10)">세로 크기 감소</button>
-            </div>
-            <button class="modern-btn reset-btn" onclick="resetSticker()">리셋</button>
           </div>
         </div>
       </div>

@@ -1,12 +1,14 @@
-from flask import Flask, render_template, request, send_from_directory, Response
+from flask import Flask, render_template, request, send_from_directory, Response, redirect, url_for
 import os
 import cv2
 import dlib
 import numpy as np
 from imutils import face_utils, resize
 from datetime import datetime
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 # 정적 파일 경로 설정
 app.static_folder = 'assets'
@@ -16,6 +18,9 @@ selected_image_path = 'orange.jpg'
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
+# 전역 변수로 이미지 경로 저장
+selected_mask_image_path = None
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -24,9 +29,6 @@ def index():
 def shop():
     return render_template('shop.html')
 
-@app.route('/product-details')
-def product_details():
-    return render_template('product-details.html')
 
 @app.route('/contact')
 def contact():
@@ -63,6 +65,10 @@ def sticker():
 def orange():
     return render_template('orange.html')  
 
+@app.route('/pc') 
+def pc():
+    return render_template('pc.html')  
+
 @app.route('/select_image')
 def select_image():
     return render_template('select_image.html')
@@ -74,10 +80,18 @@ def set_image():
     image_name = selected_image_path.split('.')[0]  # 이미지 이름 추출 (확장자 제외)
     return render_template('orange.html', image_name=image_name)  # 이미지 이름을 템플릿에 전달
 
-@app.route('/deep') 
+@app.route('/deep')
 def deep():
-    return render_template('deep.html')  
+    # mask 폴더의 이미지 파일 목록 가져오기
+    mask_files = [f for f in os.listdir('mask') if f.endswith('.jpg') or f.endswith('.png')]
+    return render_template('deep.html', mask_files=mask_files)
 
+@app.route('/set_mask_image', methods=['POST'])
+def set_mask_image():
+    global selected_mask_image_path
+    selected_image = request.form['selected_image']
+    selected_mask_image_path = os.path.join('mask', selected_image)
+    return redirect(url_for('deep'))
 
 def generate_frames():
     cap = cv2.VideoCapture(0)
@@ -145,8 +159,12 @@ def generate_frames2():
             right_eye_img = img[re_y1 - re_margin:re_y2 + re_margin, re_x1 - re_margin:re_x2 + re_margin].copy()
 
             # 눈 이미지 크기 조정
-            left_eye_img = resize(left_eye_img, width=120)  # 크기 증가
-            right_eye_img = resize(right_eye_img, width=120)  # 크기 증가
+            left_eye_img = resize(left_eye_img, width=130)  # 크기 증가
+            right_eye_img = resize(right_eye_img, width=130)  # 크기 증가
+
+            # 눈 이미지 선명도 및 대비 조정
+            left_eye_img = cv2.convertScaleAbs(left_eye_img, alpha=1.5, beta=30)
+            right_eye_img = cv2.convertScaleAbs(right_eye_img, alpha=1.5, beta=30)
 
             # 눈 합성
             result = cv2.seamlessClone(
@@ -176,6 +194,9 @@ def generate_frames2():
                         mouth_x1 - mouth_margin:mouth_x2 + mouth_margin].copy()
 
             mouth_img = resize(mouth_img, width=250)
+
+            # 입 이미지 선명도 및 대비 조정
+            mouth_img = cv2.convertScaleAbs(mouth_img, alpha=1.0, beta=30)
 
             result = cv2.seamlessClone(
                 mouth_img,
@@ -218,7 +239,7 @@ class VideoCamera(object):
         self.scaling_factor_width = 1.0  # 기본 가 크기
         self.scaling_factor_height = 1.0  # 기본 세로 크기
 
-        # 원래 크기 저장
+        # 원래  저장
         self.original_scaling_factor_width = self.scaling_factor_width
         self.original_scaling_factor_height = self.scaling_factor_height
 
@@ -256,7 +277,7 @@ class VideoCamera(object):
 
         # 얼굴마다 스티커 합성
         for dlib_rect, landmark in zip(dlib_rects, list_landmarks):
-            # 코 위치 (30번 랜드마크) 기준으로 스티커 위치 계산
+            # 코 위치 (30번 랜마크) 기준으로 스티커 위치 계산
             x = landmark[30][0] + self.sticker_offset_x
             y = landmark[30][1] - dlib_rect.height() // 2 + self.sticker_offset_y
             w = int(dlib_rect.width() * self.scaling_factor_width)  # 가로 크기 조절
@@ -276,7 +297,7 @@ class VideoCamera(object):
                 img_hat_resized = img_hat_resized[-refined_y:, :]
                 refined_y = 0
 
-            # 스티커가 이미지 경계 밖으로 나가지 않도록 조정
+            # 스티커 이지 경계 밖으로 나가지 않도 조정
             end_x = min(refined_x + img_hat_resized.shape[1], img_show.shape[1])
             end_y = min(refined_y + img_hat_resized.shape[0], img_show.shape[0])
 
@@ -330,7 +351,7 @@ def set_sticker():
     if file:
         # 스티커 파일을 stickers 폴더에 저장
         file_path = os.path.join('stickers', f'sticker{sticker_index}.png')  # 스티커 파일 경로
-        file.save(file_path)  # 파일 저장
+        file.save(file_path)  # 파일 저��
         print(f"파일 저장됨: {file_path}")  # 디버깅 메시지 추가
     return '', 204  # 응답 없이 상태 코드 204 반환
 
@@ -396,7 +417,15 @@ def reset_sticker():
 
 def generate_frames4():
     cap = cv2.VideoCapture(0)
-    img = cv2.imread("ckdmsdn.jpg")
+    
+    # 선택된 이미지 경로 사용
+    if selected_mask_image_path is None:
+        raise ValueError("No mask image selected")
+    
+    img = cv2.imread(selected_mask_image_path)
+    if img is None:
+        raise FileNotFoundError(f"Image not found: {selected_mask_image_path}")
+    
     landmarks_points1 = []
     landmarks_points2 = []
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -549,6 +578,238 @@ def generate_frames4():
 def video_feed4():
     return Response(generate_frames4(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+def determine_skin_tone(frame, landmarks):
+    # 랜드마크 좌표 추출
+    points = []
+    for n in range(68):
+        x = landmarks.part(n).x
+        y = landmarks.part(n).y
+        points.append((x, y))
+
+    # 피부 영역 마스크 생성
+    mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+    cv2.fillConvexPoly(mask, np.array(points[0:17]), 255)  # 얼굴 윤곽만 포함
+
+    # 눈과 입 내부를 제외하기 위해 선 그리기
+    cv2.fillConvexPoly(mask, np.array(points[36:48]), 0)  # 눈 내부 제외
+    cv2.fillConvexPoly(mask, np.array(points[48:68]), 0)  # 입 내부 제외
+
+    # 눈동자 제외 (왼쪽 눈동자)
+    cv2.fillConvexPoly(mask, np.array([points[36], points[37], points[38], points[39], points[40], points[41]]), 0)  # 왼쪽 눈동자 제외
+    # 눈동자 제외 (오른쪽 눈동자)
+    cv2.fillConvexPoly(mask, np.array([points[42], points[43], points[44], points[45], points[46], points[47]]), 0)  # 오른쪽 눈동자 제외
+
+    # 마스크 적용
+    skin = cv2.bitwise_and(frame, frame, mask=mask)
+
+    # 피부 영역의 Lab 색 공간으로 변환
+    lab_skin = cv2.cvtColor(skin, cv2.COLOR_BGR2Lab)
+
+    # 마스크를 사용하여 b값 추출
+    b_channel = lab_skin[:, :, 2]  # Lab 색 공간의 b 채널
+    b_values = b_channel[mask > 0]  # 피부 영역의 b값만 추출
+
+    # 평균 b값 계산
+    if b_values.size > 0:
+        avg_b = np.mean(b_values)
+        # 쿨톤과 웜톤 판단
+        if avg_b < 140:
+            return "cool"
+        else:
+            return "warm"
+    
+    return "Unknown"  # b값이 없을 경우
+def avg_b(frame, landmarks):
+    # 랜드마크 좌표 추출
+    points = []
+    for n in range(68):
+        x = landmarks.part(n).x
+        y = landmarks.part(n).y
+        points.append((x, y))
+
+    # 피부 영역 마스크 생성
+    mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+    cv2.fillConvexPoly(mask, np.array(points[0:17]), 255)  # 얼굴 윤곽만 포함
+
+    # 눈과 입 내부를 제외하기 위해 선 그리기
+    cv2.fillConvexPoly(mask, np.array(points[36:48]), 0)  # 눈 내부 제외
+    cv2.fillConvexPoly(mask, np.array(points[48:68]), 0)  # 입 내부 제외
+
+    # 눈동자 제외 (왼쪽 눈동자)
+    cv2.fillConvexPoly(mask, np.array([points[36], points[37], points[38], points[39], points[40], points[41]]), 0)  # 왼쪽 눈동자 제외
+    # 눈동자 제외 (오른쪽 눈동자)
+    cv2.fillConvexPoly(mask, np.array([points[42], points[43], points[44], points[45], points[46], points[47]]), 0)  # 오른쪽 눈동자 제외
+
+    # 마스크 적용
+    skin = cv2.bitwise_and(frame, frame, mask=mask)
+
+    # 피부 영역의 Lab 색 공간으로 변환
+    lab_skin = cv2.cvtColor(skin, cv2.COLOR_BGR2Lab)
+
+    # 마스크를 사용하여 b값 추출
+    b_channel = lab_skin[:, :, 2]  # Lab 색 공간의 b 채널
+    b_values = b_channel[mask > 0]  # 피부 영역의 b값만 추출
+
+    avg_b_value = np.mean(b_values)  # 평균 b값 계산
+
+    return avg_b_value  # 평균 b값 반환
+
+def determine_color_text(frame, landmarks):
+    # 랜드마크 좌표 추출
+    points = []
+    for n in range(68):
+        x = landmarks.part(n).x
+        y = landmarks.part(n).y
+        points.append((x, y))
+
+    # 피부 영역 마스크 생성
+    mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+    cv2.fillConvexPoly(mask, np.array(points[0:17]), 255)  # 얼굴 윤곽만 포함
+
+    # 눈과 입 내부를 제외하기 위해 선 그리기
+    cv2.fillConvexPoly(mask, np.array(points[36:48]), 0)  # 눈 내부 제외
+    cv2.fillConvexPoly(mask, np.array(points[48:68]), 0)  # 입 내부 제외
+
+    # 마스크 적용
+    skin = cv2.bitwise_and(frame, frame, mask=mask)
+
+    # HSV 색 공간으로 변환
+    hsv_skin = cv2.cvtColor(skin, cv2.COLOR_BGR2HSV)
+    h, s, v = cv2.split(hsv_skin)
+
+    # 평균 S와 V 값 계산
+    if cv2.countNonZero(mask) > 0:
+        avg_s = np.mean(s[mask > 0])
+        avg_v = np.mean(v[mask > 0])
+
+        # 색상 판단 로직
+        if avg_s >= 226:
+            color_text = "Vivid"
+        elif 142 <= avg_s < 226:
+            if abs(avg_v - 180) < abs(avg_v - 240) and abs(avg_v - 180) < abs(avg_v - 250):
+                color_text = "Deep"
+            elif abs(avg_v - 240) < abs(avg_v - 180) and abs(avg_v - 240) < abs(avg_v - 250):
+                color_text = "Strong"
+            else:
+                color_text = "Bright"
+        elif 57 <= avg_s < 142:
+            if abs(avg_v - 31) < abs(avg_v - 102) and abs(avg_v - 31) < abs(avg_v - 182) and abs(avg_v - 31) < abs(avg_v - 225):
+                color_text = "Dark"
+            elif abs(avg_v - 102) < abs(avg_v - 31) and abs(avg_v - 102) < abs(avg_v - 182) and abs(avg_v - 102) < abs(avg_v - 225):
+                color_text = "Dull"
+            elif abs(avg_v - 182) < abs(avg_v - 31) and abs(avg_v - 182) < abs(avg_v - 102) and abs(avg_v - 182) < abs(avg_v - 225):
+                color_text = "Soft"
+            else:
+                color_text = "Light"
+        else:
+            if abs(avg_v - 31) < abs(avg_v - 102) and abs(avg_v - 31) < abs(avg_v - 182) and abs(avg_v - 31) < abs(avg_v - 225):
+                color_text = "Dark Grayish"
+            elif abs(avg_v - 102) < abs(avg_v - 31) and abs(avg_v - 102) < abs(avg_v - 182) and abs(avg_v - 102) < abs(avg_v - 225):
+                color_text = "Grayish"
+            elif abs(avg_v - 182) < abs(avg_v - 31) and abs(avg_v - 182) < abs(avg_v - 102) and abs(avg_v - 182) < abs(avg_v - 225):
+                color_text = "Light Grayish"
+            else:
+                color_text = "Pale"
+        
+        return color_text  # 색상 텍스트 반환
+    
+def gen_frames5():
+    camera = cv2.VideoCapture(0)  # Open webcam
+    while True:
+        success, frame = camera.read()  # Read frame
+        if not success:
+            break
+        else:
+            # 얼굴 감지
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 프레임을 그레이스케일로 변환
+            faces = detector(gray)  # 그레이스케일 이미지에서 얼굴 감지
+            color = "Unknown"  # 기본값
+            color_text = "Unknown"  # 색상 텍스트 기본값
+            hsv_values = None  # HSV 값을 저장할 변수
+            avg_b_value = None  # 평균 b값을 저장할 변수
+
+            for face in faces:
+                # 랜드마크 감지
+                landmarks = predictor(gray, face)
+
+                # 개인 색상 결정
+                color = determine_skin_tone(frame, landmarks)
+                color_text = determine_color_text(frame, landmarks)  # 색상 텍스트 결정
+
+                # 평균 b값 계산
+                avg_b_value = avg_b(frame, landmarks)
+
+                # 마스크 적용
+                points = []
+                for n in range(68):
+                    x = landmarks.part(n).x
+                    y = landmarks.part(n).y
+                    points.append((x, y))
+
+                # 피부 영역 마스크 생성
+                mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+                cv2.fillConvexPoly(mask, np.array(points[0:17]), 255)  # 얼굴 윤곽만 포함
+
+                # 눈과 입 내부를 제외하기 위해 선 그리기
+                cv2.fillConvexPoly(mask, np.array(points[36:48]), 0)  # 눈 내부 제외
+                cv2.fillConvexPoly(mask, np.array(points[48:68]), 0)  # 입 내부 제외
+
+                # 눈동자 제외 (왼쪽 눈동자)
+                cv2.fillConvexPoly(mask, np.array([points[36], points[37], points[38], points[39], points[40], points[41]]), 0)  # 왼쪽 눈동자 제외
+                # 눈동자 제외 (오른쪽 눈동자)
+                cv2.fillConvexPoly(mask, np.array([points[42], points[43], points[44], points[45], points[46], points[47]]), 0)  # 오른쪽 눈동자 제외
+
+                # 마스크가 적용된 부분의 HSV 값 측정
+                masked_skin = cv2.bitwise_and(frame, frame, mask=mask)
+                hsv_masked_skin = cv2.cvtColor(masked_skin, cv2.COLOR_BGR2HSV)
+                h, s, v = cv2.split(hsv_masked_skin)
+
+                # 평균 HSV 값 계산
+                if cv2.countNonZero(mask) > 0:
+                    avg_h = np.mean(h[mask > 0])
+                    avg_s = np.mean(s[mask > 0])
+                    avg_v = np.mean(v[mask > 0])
+                    hsv_values = (avg_h, avg_s, avg_v)
+
+                # 마스크가 적용되지 않은 부분을 어둡게 변경
+                frame[mask == 0] = frame[mask == 0] * 0.5  # 어둡게 설정 (50% 밝기)
+
+                # 마스크가 적용된 얼굴 영역 그리기
+                cv2.addWeighted(masked_skin, 0.5, frame, 0.5, 0, frame)
+
+            # 결과를 프레임에 추가
+            cv2.putText(frame, f'Warm or Cool: {color}', (10, 30), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+            
+            cv2.putText(frame, f'Color: {color_text}', (10, 60), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+
+            # HSV 값 표시
+            if hsv_values:
+                cv2.putText(frame, f'Avg HSV: H={hsv_values[0]:.2f}, S={hsv_values[1]:.2f}, V={hsv_values[2]:.2f}', 
+                            (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+            # 평균 b값 표시
+            if avg_b_value is not None:
+                cv2.putText(frame, f'Avg b: {avg_b_value:.2f}', (10, 120), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+            # 웹소켓을 통해 데이터 전송
+            socketio.emit('color_data', {
+                'color': color, 
+                'color_text': color_text, 
+                'hsv_values': hsv_values,
+                'avg_b_value': avg_b_value  # 평균 b값 추가
+            })
+
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            
+@app.route('/video_feed5')
+def video_feed5():
+    return Response(gen_frames5(), mimetype='multipart/x-mixed-replace; boundary=frame')
 # @app.route('/video_feed5')
 # def video_feed5():
 #     return Response(generate_frames5(), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -560,5 +821,17 @@ camera = VideoCamera()
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
 

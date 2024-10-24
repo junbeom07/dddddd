@@ -351,7 +351,7 @@ def set_sticker():
     if file:
         # 스티커 파일을 stickers 폴더에 저장
         file_path = os.path.join('stickers', f'sticker{sticker_index}.png')  # 스티커 파일 경로
-        file.save(file_path)  # 파일 저��
+        file.save(file_path)  # 파일 저
         print(f"파일 저장됨: {file_path}")  # 디버깅 메시지 추가
     return '', 204  # 응답 없이 상태 코드 204 반환
 
@@ -418,7 +418,7 @@ def reset_sticker():
 def generate_frames4():
     cap = cv2.VideoCapture(0)
     
-    # 선택된 이미지 경로 사용
+    # 선택된 이미지 ��로 사용
     if selected_mask_image_path is None:
         raise ValueError("No mask image selected")
     
@@ -553,7 +553,7 @@ def generate_frames4():
             if warped_triangle.shape[:2] != mask_triangles_designed.shape[:2]:
                 mask_triangles_designed = cv2.resize(mask_triangles_designed, (warped_triangle.shape[1], warped_triangle.shape[0]))
 
-            # warped_triangle을 비트 연산으로 결합
+            # warped_triangle을 비트 연산으로 ��합
             warped_triangle = cv2.bitwise_and(warped_triangle, warped_triangle, mask=mask_triangles_designed)
 
             img2_new_face_rect_area = cv2.add(img2_new_face_rect_area, warped_triangle)
@@ -651,6 +651,9 @@ def avg_b(frame, landmarks):
     b_values = b_channel[mask > 0]  # 피부 영역의 b값만 추출
 
     avg_b_value = np.mean(b_values)  # 평균 b값 계산
+
+    # 검은색으로 설정
+    frame[mask == 0] = [0, 0, 0]  # 어둡게 설정 부분 수정
 
     return avg_b_value  # 평균 b값 반환
 
@@ -772,7 +775,7 @@ def gen_frames5():
                     hsv_values = (avg_h, avg_s, avg_v)
 
                 # 마스크가 적용되지 않은 부분을 어둡게 변경
-                frame[mask == 0] = frame[mask == 0] * 0.5  # 어둡게 설정 (50% 밝기)
+                frame[mask == 0] = frame[mask == 0] * 10  # 어둡게 설정 (50% 밝기)
 
                 # 마스크가 적용된 얼굴 영역 그리기
                 cv2.addWeighted(masked_skin, 0.5, frame, 0.5, 0, frame)
@@ -822,6 +825,7 @@ camera = VideoCamera()
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
+
 
 
 
